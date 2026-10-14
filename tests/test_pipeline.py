@@ -101,7 +101,7 @@ class ProviderTests(unittest.TestCase):
             j=Path(t)/"en.json";j.write_text(json.dumps({"segments":[{"id":1,"start":0,"end":2,"text":"Hi"}]}))
             sdk=MagicMock();sdk.chat.completions.create.return_value=SimpleNamespace(
                 choices=[SimpleNamespace(message=SimpleNamespace(content='{"items":[{"id":3,"text":"नमस्ते"}]}'))])
-            with self.assertRaisesRegex(ValueError,"missing, duplicate"):
+            with self.assertRaisesRegex(ValueError,"changed, duplicated"):
                 OpenAIHindiTranslator(sdk).run({"folder":t,"config":{"translation":{"model":"test"}},
                                                 "previous":{"transcribe":{"english_json":str(j)}}})
 if __name__=="__main__":unittest.main()
