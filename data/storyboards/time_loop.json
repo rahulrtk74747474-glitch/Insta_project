@@ -1,0 +1,87 @@
+{
+  "title": "पढ़ाई का टाइम लूप: पढ़ा हुआ कैसे याद रखें?",
+  "slug": "time-loop-study-hindi",
+  "format": "vertical",
+  "fps": 15,
+  "style": {
+    "paper": "#FFF9EA",
+    "ink": "#243046",
+    "blue": "#3C7DE0",
+    "coral": "#F27565",
+    "mint": "#3CB39D",
+    "yellow": "#FFD46B",
+    "character": "original cheerful student in blue hoodie"
+  },
+  "scenes": [
+    {
+      "id": "S01",
+      "art": "student",
+      "duration_sec": 7.451,
+      "title": "भूलने की समस्या",
+      "overlay": "क्या पढ़ा याद रहता है?",
+      "narration": "क्या आप पढ़ते हैं, और अगले दिन भूल जाते हैं? पढ़ाई को टाइम लूप बनाइए!",
+      "visual": "confused student at study desk with fading thought bubble",
+      "motion": "draw character, then question bubbles"
+    },
+    {
+      "id": "S02",
+      "art": "book",
+      "duration_sec": 7.607,
+      "title": "समझकर पढ़ना",
+      "overlay": "समझो, फिर समझाओ",
+      "narration": "पहले विषय को ध्यान से समझिए। फिर किताब बंद करके खुद को समझाकर देखिए।",
+      "visual": "green open book, lightbulb above and hand-drawn concept icons",
+      "motion": "page reveal, light bulb glows"
+    },
+    {
+      "id": "S03",
+      "art": "recall",
+      "duration_sec": 8.154,
+      "title": "एक्टिव रिकॉल",
+      "overlay": "किताब बंद, याद से लिखो",
+      "narration": "किताब बंद कीजिए। जो याद है, उसे बिना देखे लिखिए। इसे एक्टिव रिकॉल कहते हैं।",
+      "visual": "brain above answer notebook; pencil writes",
+      "motion": "brain sketched and lines appear"
+    },
+    {
+      "id": "S04",
+      "art": "calendar",
+      "duration_sec": 7.475,
+      "title": "स्पेस्ड रिविजन",
+      "overlay": "आज • 1 • 3 • 7 • 14 दिन",
+      "narration": "उसी दिन, फिर एक दिन, तीन दिन, सात दिन और चौदह दिन बाद छोटा रिविज़न कीजिए।",
+      "visual": "colored revision calendar with sequential day markers",
+      "motion": "dates fill from left to right"
+    },
+    {
+      "id": "S05",
+      "art": "quiz",
+      "duration_sec": 8.318,
+      "title": "पाँच सवालों का टेस्ट",
+      "overlay": "गलतियों से सीखें",
+      "narration": "हर बार खुद से पाँच सवाल पूछिए। जो गलत हुए, सिर्फ उन्हीं हिस्सों को दोबारा पढ़ें।",
+      "visual": "mini test sheet, four green checks and one coral error",
+      "motion": "checkboxes tick one by one"
+    },
+    {
+      "id": "S06",
+      "art": "palace",
+      "duration_sec": 6.852,
+      "title": "मेमोरी पैलेस",
+      "overlay": "हर वस्तु = एक याद",
+      "narration": "मुश्किल बातें याद रखने के लिए उन्हें अपने कमरे की अलग-अलग चीज़ों से जोड़िए।",
+      "visual": "cozy room as memory palace, labeled objects",
+      "motion": "draw house, then attach memory notes"
+    },
+    {
+      "id": "S07",
+      "art": "loop",
+      "duration_sec": 8.528,
+      "title": "रोज़ का स्टडी लूप",
+      "overlay": "रोज़ थोड़ा, याद ज़्यादा!",
+      "narration": "आज का नया टॉपिक सीखें, और पुराने टॉपिक का छोटा रिविज़न करें। यही है स्टडी टाइम लूप!",
+      "visual": "circular plan connecting new lessons and spaced reviews",
+      "motion": "draw circular arrow and end screen"
+    }
+  ]
+}
