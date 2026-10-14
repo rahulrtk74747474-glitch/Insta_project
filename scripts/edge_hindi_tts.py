@@ -52,16 +52,47 @@ async def generate(args):
                     "end":(chunk["offset"]+chunk["duration"])/10000000,
                     "text":chunk["text"]})
     if target.stat().st_size<1000:raise RuntimeError("No usable audio returned")
-    if len(words)<100:
-        raise RuntimeError(f"Only {len(words)} word boundary events; cannot ensure subtitle synchronization")
-    captions=group_captions(words)
+    if len(words)>=100:
+        captions=group_captions(words)
+        alignment="service_word_boundaries"
+    else:
+        # Some current Hindi voices emit no WordBoundary events. Report estimated
+        # timing explicitly rather than failing after successfully creating audio.
+        import subprocess
+        result=subprocess.check_output([
+            "ffprobe","-v","error","-show_entries","format=duration",
+            "-of","default=noprint_wrappers=1:nokey=1",str(target)
+        ],text=True)
+        duration=float(result.strip())
+        tokens=text.split()
+        pieces=[]
+        chunk=[]
+        for token in tokens:
+            if chunk and len(" ".join(chunk+[token]))>55:
+                pieces.append(" ".join(chunk));chunk=[]
+            chunk.append(token)
+            if token.endswith(("।","!","?")) and len(" ".join(chunk))>25:
+                pieces.append(" ".join(chunk));chunk=[]
+        if chunk: pieces.append(" ".join(chunk))
+        weights=[len(x)+(13 if x.endswith("।") else 0) for x in pieces]
+        total=sum(weights)
+        seconds=0
+        captions=[]
+        for i,(piece,weight) in enumerate(zip(pieces,weights),1):
+            start=seconds
+            seconds+=duration*weight/total
+            captions.append({"id":i,"start":start,"end":seconds,"text":piece})
+        alignment="estimated_from_text_length_no_word_boundaries"
+    if not captions:
+        raise RuntimeError("No Hindi subtitle cues could be generated")
     srt=target.with_suffix(".srt")
     srt.write_text("".join(
         f"{x['id']}\n{srt_time(x['start'])} --> {srt_time(x['end'])}\n{x['text']}\n\n"
         for x in captions),encoding="utf-8")
     report={"output":str(target),"bytes":target.stat().st_size,
             "voice":args.voice,"characters":len(text),"words_with_timing":len(words),
-            "caption_cues":len(captions),"last_word_end":round(words[-1]["end"],3)}
+            "caption_cues":len(captions),"alignment":alignment,
+            "last_word_end":round(words[-1]["end"],3) if words else None}
     target.with_suffix(".json").write_text(json.dumps(
         {"report":report,"words":words,"captions":captions},ensure_ascii=False,indent=2),
         encoding="utf-8")
