@@ -7,6 +7,17 @@
 
 The default English ASR provider is now `ImprovedFasterWhisper`. See [Stage 2 comparison and configuration](docs/stages/02_improved_comparison.md). Set `whisper.provider: original` to use legacy caption formatting.
 
+## Stage 3 — Everyday spoken Hindi script (in development, review branch)
+
+The new default is `translation.mode: spoken_adaptation`. Instead of reading a
+subtitle-by-subtitle translation aloud, the model groups English cues into complete
+ideas and rewrites them in conversational Hindi. Stage 3 writes
+`hindi_voice_script.txt` and `hindi_voice_script.json` as the canonical
+future narration inputs, **plus a separately derived `hindi.srt`**. These subtitle
+timestamps are approximate until Stage 4 actual TTS measurement. Choose
+`translation.mode: subtitle_literal` for the earlier provider.
+See [natural-spoken Hindi instructions](docs/stages/03_natural_spoken_hindi.md).
+
 ## Stage 3 — Hindi translation (in development, review branch)
 
 English Stage 2 (Option B `base.en`) and Stage 1 are preserved. Stage 3 produces only `hindi.srt`, `hindi.json`, and `translation_report.json`, with a resumable per-batch cache. No video is rendered or uploaded; real API integration requires a key in `.env`. See [Stage 3 instructions](docs/stages/03_translate.md).
