@@ -8,6 +8,7 @@ from .ingest import YtDlpOrFile
 from .transcribe import FasterWhisper
 from .transcribe_improved import ImprovedFasterWhisper
 from .translate import OpenAIHindiTranslator
+from .translate_spoken import NaturalHindiScriptAdapter
 
 PROVIDERS={"ingest":YtDlpOrFile,"transcribe":ImprovedFasterWhisper,"translate":OpenAIHindiTranslator}
 
@@ -25,6 +26,14 @@ class Pipeline:
                 self.providers["transcribe"] = ImprovedFasterWhisper()
             else:
                 raise ValueError(f"Unknown whisper.provider: {selected!r}; choose improved or original")
+        if providers is None:
+            mode = config.get("translation", {}).get("mode", "spoken_adaptation")
+            if mode == "spoken_adaptation":
+                self.providers["translate"] = NaturalHindiScriptAdapter()
+            elif mode == "subtitle_literal":
+                self.providers["translate"] = OpenAIHindiTranslator()
+            else:
+                raise ValueError(f"Unknown translation.mode: {mode!r}")
         self.log=logging.getLogger("hindi_pipeline")
     @staticmethod
     def identifier(source,mode):
@@ -40,7 +49,7 @@ class Pipeline:
     @staticmethod
     def valid(result):
         if not result:return False
-        paths=("video","audio","vocals","no_vocals","english_srt","english_json","asr_report","hindi_srt","hindi_json","translation_report")
+        paths=("video","audio","vocals","no_vocals","english_srt","english_json","asr_report","hindi_srt","hindi_json","translation_report","hindi_voice_script_json","hindi_voice_script_txt")
         return all(not isinstance(v,str) or k not in paths or Path(v).is_file() for k,v in result.items())
     def process(self,id,until="translate",force_stage=None):
         if until not in STAGES:raise ValueError("Unsupported stage")

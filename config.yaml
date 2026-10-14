@@ -13,8 +13,13 @@ whisper:
   vad_filter: true
 translation:
   provider: openai
+  mode: spoken_adaptation
+  audience: tum
+  min_group_seconds: 6
+  max_group_seconds: 14
+  max_group_cues: 4
   model: gpt-4o-mini
-  batch_size: 8
+  batch_size: 4
   max_quality_attempts: 3
   speed_tolerance: 1.15
   glossary:
