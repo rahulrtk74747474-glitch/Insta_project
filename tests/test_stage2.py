@@ -37,6 +37,15 @@ class WordTimingTests(unittest.TestCase):
         self.assertEqual(cues[1]["start"],2.0)
         self.assertEqual(len(warnings),0)
 
+    def test_zero_length_timestamp_preserves_word(self):
+        cues, warnings = _segments_to_cues(
+            [seg(0, 2, "Feel productive.", [
+                word(.2, .2, "Feel"), word(.3, 1.1, "productive.")])], 6, 84)
+        self.assertEqual(cues[0]["text"], "Feel productive.")
+        self.assertEqual(cues[0]["words"][0]["end"], .21)
+        self.assertTrue(cues[0]["words"][0]["timing_estimated"])
+        self.assertEqual(warnings, [])
+
     def test_empty_word_list_warning(self):
         cues,warnings=_segments_to_cues([seg(0,2,"Testing",[])],6,84)
         self.assertEqual(cues[0]["text"],"Testing")
