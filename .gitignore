@@ -11,3 +11,4 @@ state/
 
 # Stage 3 local checkpoint/cache files; never commit transcripts
 *.tmp
+\n# Private personal voice recordings and local voice prompt caches\ninput/private_voice/\n*.pt\n*.m4a\n

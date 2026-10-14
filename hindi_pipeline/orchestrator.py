@@ -10,6 +10,7 @@ from .transcribe_improved import ImprovedFasterWhisper
 from .translate import OpenAIHindiTranslator
 from .translate_spoken import NaturalHindiScriptAdapter
 from .voice import OpenAIHindiVoice
+from .voice_omnivoice import OmniVoiceHindiVoice
 from .render import HindiVideoComposer
 
 PROVIDERS={"ingest":YtDlpOrFile,"transcribe":ImprovedFasterWhisper,"translate":OpenAIHindiTranslator,"voice":OpenAIHindiVoice,"render":HindiVideoComposer}
@@ -36,6 +37,14 @@ class Pipeline:
                 self.providers["translate"] = OpenAIHindiTranslator()
             else:
                 raise ValueError(f"Unknown translation.mode: {mode!r}")
+        if providers is None:
+            voice_backend = config.get("voice", {}).get("provider", "openai")
+            if voice_backend == "openai":
+                self.providers["voice"] = OpenAIHindiVoice()
+            elif voice_backend == "omnivoice":
+                self.providers["voice"] = OmniVoiceHindiVoice()
+            else:
+                raise ValueError(f"Unsupported voice.provider: {voice_backend!r}")
         self.log=logging.getLogger("hindi_pipeline")
     @staticmethod
     def identifier(source,mode):

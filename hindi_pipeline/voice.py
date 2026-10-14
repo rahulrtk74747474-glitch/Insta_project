@@ -62,7 +62,11 @@ def _read_source(context):
 def _signature(doc, settings, duration):
     selection = {key: settings.get(key) for key in
         ("provider","model","voice","instructions","max_tempo","audio_sample_rate",
-         "auto_shorten","max_rewrites","rewrite_model")}
+         "auto_shorten","max_rewrites","rewrite_model","device","num_step","generation_speed")}
+    if settings.get("provider") == "omnivoice":
+        # Voice identity must invalidate all cached speech after an audio/text change.
+        from .voice_omnivoice import reference_digest
+        selection["reference_digest"] = reference_digest(settings)
     return hashlib.sha256(json.dumps({
         "revision":REVISION,"blocks":doc["blocks"],
         "configuration":selection,"total_duration_s":duration,
@@ -162,6 +166,8 @@ def _srt_from_audio(blocks, measured, stage3_cues):
 
 
 class OpenAIHindiVoice(StageProvider):
+    provider_name = "openai"
+
     def __init__(self, client=None):
         self.client=client
 
@@ -236,8 +242,8 @@ class OpenAIHindiVoice(StageProvider):
 
     def run(self,context):
         settings=context["config"].get("voice",{})
-        if settings.get("provider","openai")!="openai":
-            raise ValueError("Unsupported TTS provider; choose voice.provider: openai")
+        if settings.get("provider","openai")!=self.provider_name:
+            raise ValueError(f"Wrong TTS provider for {self.__class__.__name__}: choose voice.provider: {self.provider_name}")
         model=settings.get("model","gpt-4o-mini-tts")
         voice=settings.get("voice","marin")
         instructions=settings.get("instructions",DEFAULT_INSTRUCTIONS)
@@ -383,11 +389,12 @@ class OpenAIHindiVoice(StageProvider):
             "segments":captions},ensure_ascii=False,indent=2)+"\n")
         report={
             "stage":"voice","status":"completed",
-            "provider":"openai","model":model,"voice":voice,
+            "provider":self.provider_name,"model":model,"voice":voice,
             "sample_rate_hz":RATE,"channels":1,"sample_width_bytes":2,
             "total_duration_s":round(duration,3),
             "spoken_blocks":len(blocks),
-            "api_requests_this_run":generated,
+            "api_requests_this_run":generated if self.provider_name=="openai" else 0,
+            "synthesis_calls_this_run":generated,
             "cached_blocks_this_run":reused,
             "maximum_tempo_used":max(x["tempo_factor"] for x in measures),
             "source_script_fingerprint":doc.get("fingerprint"),
@@ -413,5 +420,7 @@ class OpenAIHindiVoice(StageProvider):
             "hindi_tts_estimated_srt":str(estimate_srt),
             "hindi_tts_estimated_json":str(estimate_json),
             "fingerprint":fingerprint,"blocks":len(blocks),
-            "provider":"openai","api_requests":generated,"cached_blocks":reused,
+            "provider":self.provider_name,
+            "api_requests":generated if self.provider_name=="openai" else 0,
+            "synthesis_calls":generated,"cached_blocks":reused,
         }

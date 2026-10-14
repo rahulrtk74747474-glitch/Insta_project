@@ -27,9 +27,15 @@ translation:
     spaced repetition: स्पेस्ड रिपिटिशन
     Stephen Hawking: स्टीफन हॉकिंग
 voice:
-  provider: openai
-  model: gpt-4o-mini-tts
-  voice: marin
+  provider: omnivoice
+  model: k2-fsa/OmniVoice
+  voice: personal_hindi_reference
+  reference_voice_consent_confirmed: true
+  reference_audio: input/private_voice/hindi_voice_reference_9s.wav
+  reference_text_file: input/private_voice/hindi_voice_reference_9s.txt
+  device: auto
+  num_step: 32
+  generation_speed: 1.0
   max_tempo: 1.18
   audio_sample_rate: 24000
   auto_shorten: true
