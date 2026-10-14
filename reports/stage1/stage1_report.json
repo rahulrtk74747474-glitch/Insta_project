@@ -1,0 +1,41 @@
+{
+  "stage": "1 - Ingest",
+  "job_id": "431c96e5495486d8",
+  "overall": "PARTIAL_PASS",
+  "source": {
+    "source_label": "User-supplied 293.481 s MP4 (file deliberately not committed)",
+    "duration_s": 293.481375,
+    "resolution": "1280x720",
+    "video_codec": "H.264",
+    "audio_codec": "AAC",
+    "audio_channels": 2,
+    "file_bytes": 5360134,
+    "copied_sha256_match": true
+  },
+  "audio": {
+    "created": true,
+    "sample_rate_hz": 44100,
+    "channels": 2,
+    "format": "PCM signed 16 bit WAV",
+    "duration_s": 293.398639,
+    "source_vs_wav_duration_difference_s": 0.082736,
+    "size_bytes": 51755598
+  },
+  "demucs": {
+    "attempted": true,
+    "completed": false,
+    "reason": "Model weights not cached and blocked by offline DNS/network environment",
+    "vocals_stem": null,
+    "background_stem": null,
+    "sound_quality_not_evaluated": true
+  },
+  "resume": {
+    "initial_demucs_run": "failed",
+    "second_run_with_demucs_disabled": "completed",
+    "third_run": "skipped",
+    "stage_attempts": 2,
+    "passed": true
+  },
+  "stage2": "not run in this report",
+  "publishing": "not run"
+}
