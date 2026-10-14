@@ -27,9 +27,10 @@ translation:
     spaced repetition: स्पेस्ड रिपिटिशन
     Stephen Hawking: स्टीफन हॉकिंग
 voice:
-  provider: openai
-  model: gpt-4o-mini-tts
-  voice: marin
+  provider: edge
+  model: edge-neural
+  voice: hi-IN-MadhurNeural
+  rate: '-2%'
   max_tempo: 1.18
   audio_sample_rate: 24000
   auto_shorten: true
