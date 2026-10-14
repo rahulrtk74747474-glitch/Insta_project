@@ -91,7 +91,7 @@ class OpenAIHindiTranslator(StageProvider):
         if not response.choices:
             raise RuntimeError("Translation API returned no choices")
         choice = response.choices[0]
-        if choice.finish_reason == "length":
+        if getattr(choice, "finish_reason", None) == "length":
             raise RuntimeError("Translation API truncated its response; reduce batch_size")
         message = choice.message
         if getattr(message, "refusal", None):
