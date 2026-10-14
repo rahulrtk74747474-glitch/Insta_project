@@ -1,0 +1,42 @@
+{
+  "stage": "2 - English transcription",
+  "source": "user-provided MP4 (media remains local; not in public GitHub)",
+  "source_duration_sec": 293.481375,
+  "input_from_stage_1": "Original mixed 44.1 kHz WAV; Demucs stems unavailable",
+  "status": "PASS_ASR_WITH_UNREVIEWED_TRANSCRIPT",
+  "engine": "faster-whisper tiny.en (CPU int8)",
+  "audio_duration_sec": 293.398639,
+  "whisper_raw_segments": 48,
+  "refined_caption_cues": 120,
+  "word_tokens": 741,
+  "zero_duration_word_timings_adjusted_10ms": 19,
+  "last_caption_end_sec": 292.84,
+  "transcript_quality_note": "Automated output is not a verified reference transcript; no ground-truth WER measured.",
+  "resume_test": {
+    "status": "PASS",
+    "stage_1": {
+      "status": "completed",
+      "attempts": 2
+    },
+    "stage_2": {
+      "status": "completed",
+      "attempts": 2,
+      "next_run_skipped": true
+    },
+    "stage_3": {
+      "status": "pending",
+      "attempts": 0
+    }
+  },
+  "dependency_issue": {
+    "observed": "PyAV 19 rejected metadata_errors argument with faster-whisper 1.2.1 on Python 3.13",
+    "resolution": "Pin av>=11,<19; PyAV 18.1.0 used for successful local test"
+  },
+  "test_scope": {
+    "original_mp4_transcribed_locally": true,
+    "source_media_uploaded_to_public_repo": false,
+    "synthetic_english_model_smoke_on_github_actions": true,
+    "translation_run": false,
+    "publishing_run": false
+  }
+}
