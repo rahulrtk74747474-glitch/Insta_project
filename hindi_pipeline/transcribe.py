@@ -36,12 +36,20 @@ def _segments_to_cues(segments: Any, max_duration: float, max_chars: int):
             if getattr(word, "start", None) is None or getattr(word, "end", None) is None:
                 continue
             a, b = float(word.start), float(word.end)
-            if not (math.isfinite(a) and math.isfinite(b) and 0 <= a < b):
+            if not (math.isfinite(a) and math.isfinite(b) and a >= 0 and b >= 0):
                 continue
             token = str(getattr(word, "word", "")).strip()
             if not token:
                 continue
+            # Some Whisper words have equal start/end timestamps. Preserve their
+            # text, but flag the 10ms timing as estimated rather than pretending
+            # that the original zero-duration timestamp was trustworthy.
+            adjusted = b <= a
+            if adjusted:
+                b = a + 0.01
             entry = {"word": token, "start": round(a, 3), "end": round(b, 3)}
+            if adjusted:
+                entry["timing_estimated"] = True
             if getattr(word, "probability", None) is not None:
                 entry["probability"] = round(float(word.probability), 4)
             tokens.append(entry)
@@ -120,6 +128,12 @@ class FasterWhisper(StageProvider):
         if not any(cue["words"] for cue in data):
             raise ValueError("ASR returned no usable word timestamps")
         words = sum(len(cue["words"]) for cue in data)
+        adjusted_words = sum(
+            1 for cue in data for word in cue["words"]
+            if word.get("timing_estimated"))
+        if adjusted_words:
+            warnings.append(
+                f"{adjusted_words} zero-length word timestamps were preserved with 10ms estimates")
         if audio_kind == "original_mixed_audio":
             warnings.append("Transcribed mixed original audio: Demucs vocals were unavailable")
         if any(not cue["words"] for cue in data):
@@ -149,6 +163,7 @@ class FasterWhisper(StageProvider):
             "audio_kind": audio_kind,
             "captions": len(data),
             "words_with_timestamps": words,
+            "estimated_zero_length_word_timings": adjusted_words,
             "start_s": data[0]["start"],
             "end_s": data[-1]["end"],
             "warnings": sorted(set(warnings)),
