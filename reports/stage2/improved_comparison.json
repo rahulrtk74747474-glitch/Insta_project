@@ -1,0 +1,27 @@
+{
+  "source": "User-provided 293.481 second study video; source media not committed to public repository",
+  "stage1_demucs": "Unavailable; mixed original audio used for BOTH comparisons",
+  "baseline": {
+    "model": "tiny.en",
+    "captions": 120,
+    "words_with_timestamps": 741,
+    "shorter_than_0_8s": 11,
+    "over_18_chars_per_second": 68,
+    "overlap_count": 0,
+    "source": "existing stage2 output"
+  },
+  "improved": {
+    "model": "base.en",
+    "captions": 72,
+    "words_with_timestamps": 747,
+    "zero_duration_words_explicitly_flagged": 3,
+    "shorter_than_0_8s": 0,
+    "over_18_chars_per_second": 13,
+    "over_22_chars_per_second": 0,
+    "overlap_count": 0,
+    "max_chars_per_line": 42
+  },
+  "note": "Counts and presentation stats are measured. Accuracy/WER relative to the real narration is UNKNOWN without a manually verified reference. Both are ASR-generated automatically. No further pipeline stages were run.",
+  "video_uploaded_to_github": false,
+  "public_transcript_uploaded": false
+}
