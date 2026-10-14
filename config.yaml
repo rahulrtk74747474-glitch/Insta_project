@@ -1,0 +1,20 @@
+# Milestone 1: ingest, transcription, translation. No publishing.
+output_dir: output
+database: state/jobs.sqlite3
+demucs:
+  enabled: true
+  model: htdemucs
+whisper:
+  model: small.en
+  device: cpu
+  compute_type: int8
+  beam_size: 5
+  vad_filter: true
+translation:
+  provider: openai
+  model: gpt-4o-mini
+  batch_size: 10
+  glossary:
+    active recall: एक्टिव रिकॉल
+    spaced repetition: स्पेस्ड रिपिटिशन
+    Stephen Hawking: स्टीफन हॉकिंग
