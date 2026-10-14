@@ -46,3 +46,11 @@ jobs:
           pip install 'faster-whisper>=1.1,<2'
       - name: Transcribe synthesized English narration (tiny.en)
         run: python -m scripts.stage2_live_smoke
+      - name: Upload proof-of-transcription files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage2-synthetic-asr-results
+          path: dist/stage2_synthetic_smoke/
+          if-no-files-found: warn
+          retention-days: 14
