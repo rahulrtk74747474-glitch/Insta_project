@@ -12,7 +12,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from .common import StageProvider, write_srt
+from .common import StageProvider
+from .caption_optimizer import split_lines, save_srt
 from .translation_quality import (
     REVISION, check_english_segments, fingerprint, glossary_matches,
     translation_fingerprint, validate_hindi
@@ -62,7 +63,7 @@ def _write_atomic(path: Path, body: str):
 def _srt_text(rows: list[dict]) -> str:
     with tempfile.TemporaryDirectory() as tmp:
         path = Path(tmp) / "captions.srt"
-        write_srt(rows, path)
+        save_srt([{**row, "display_lines": split_lines(row["text"], width=42)} for row in rows], path)
         return path.read_text(encoding="utf-8")
 
 
