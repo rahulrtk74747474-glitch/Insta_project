@@ -62,3 +62,28 @@ A separate GitHub Actions job installs `faster-whisper`, downloads the `tiny.en`
 ## Security and scope
 
 Nothing is uploaded or posted anywhere. Do not check in customer/user video or API keys. No .env credentials are required to test Stage 2, and Stage 3 translation is not invoked.
+
+## Recorded result: actual uploaded study video
+
+A real local CPU transcription was completed on the supplied 4m53.48s MP4, using the Stage 1 audio. The MP4, extracted WAV and full transcript were **not pushed to the public repository**. Only aggregate metrics appear in [reports/stage2/stage2_actual_video_test.json](../../reports/stage2/stage2_actual_video_test.json).
+
+- Faster-Whisper `tiny.en`, CPU int8, 48 original ASR segments.
+- 741 English word tokens with timestamps; **19 zero-length token timings preserved with explicitly flagged 10ms estimates**.
+- 120 readable SRT cues after time/punctuation splitting; timestamps monotonic, no overlap, final cue at 292.84 seconds.
+- Stage 2 in SQLite: completed; second invocation skipped successfully without another ASR run.
+- Stage 3: pending; no Hindi translation or publishing.
+- Known limitation: Demucs stems were unavailable during Stage 1, so ASR used original mixed audio. No reference transcript was provided, so word-error rate is unknown.
+
+### Dependency compatibility note
+
+Under Python 3.13, unpinned PyAV 19 raised `TypeError: open() got an unexpected keyword argument 'metadata_errors'` inside Faster-Whisper 1.2.1. A compatible PyAV 18.1.0 wheel fixed this, and `requirements.txt` now constrains `av>=11,<19`. GitHub Actions also ran a real Faster-Whisper `tiny.en` smoke test with its own synthetic English recording.
+
+### Direct quick test for a new video
+
+Use `config.stage2_cpu.yaml` (Demucs disabled, Whisper `tiny.en`, CPU int8) only as a development mode:
+
+```bash
+python run.py --config config.stage2_cpu.yaml --file input/owned_video.mp4 --rights-confirmed --until transcribe
+```
+
+The output JSON displays the job ID. Inspect `output/<job_id>/transcribe/english.srt`, `english.json` and `asr_report.json`. For better recognition accuracy once the quick test passes, replace `tiny.en` with `small.en` (slower/higher memory).
