@@ -2,6 +2,8 @@
 from __future__ import annotations
 import json
 import math
+import os
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -75,6 +77,20 @@ class RenderTests(unittest.TestCase):
             self.assertAlmostEqual(item["duration_seconds"],3.2,delta=.25)
             self.assertEqual(item["audio_codec"],"aac")
             self.assertEqual(item["video_codec"],"h264")
+
+        if os.environ.get("STAGE5_SAVE_SAMPLE") == "1":
+            # Public CI artifacts contain only our synthetic color-test video/tone,
+            # NOT the user's copyrighted/private original clip or live Hindi voice.
+            preview=Path("dist")/"stage5_synthetic_preview"
+            preview.mkdir(parents=True,exist_ok=True)
+            shutil.copy2(output["hindi_landscape_mp4"],preview/"synthetic_landscape.mp4")
+            shutil.copy2(output["hindi_portrait_mp4"],preview/"synthetic_portrait.mp4")
+            shutil.copy2(output["render_report"],preview/"render_report.json")
+            (preview/"README.txt").write_text(
+                "SYNTHETIC test only. Video = FFmpeg test colors; English stand-in = 220 Hz tone; "
+                "Hindi stand-in = 440 Hz tone. These are NOT real voices or the user video. "
+                "Both mp4s intentionally contain only the Hindi stand-in audio. "
+                "Subtitle text is a test fixture, and timing is estimated.\n",encoding="utf-8")
 
         audio_out=self.base/"extracted_from_render.wav"
         run("ffmpeg","-hide_banner","-loglevel","error","-y",
