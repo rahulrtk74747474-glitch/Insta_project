@@ -7,6 +7,17 @@
 
 The default English ASR provider is now `ImprovedFasterWhisper`. See [Stage 2 comparison and configuration](docs/stages/02_improved_comparison.md). Set `whisper.provider: original` to use legacy caption formatting.
 
+## Your own Hindi voice — OmniVoice (review branch)
+
+The user-provided human voice can be cloned with the local
+[OmniVoice Python provider](docs/stages/04_omnivoice.md).
+Set `voice.provider: omnivoice` and put the private reference WAV and
+exact Hindi transcript in gitignored `input/private_voice/`.
+The standalone smoke test is `python scripts/preview_personal_voice.py`.
+No robotic eSpeak is used or selected by the production pipeline.
+The personal-voice engine has **mocked integration tests, not yet a live
+model-generated voice quality test**. Keep cloning artifacts private.
+
 ## Stage 5 — Hindi video composition (review branch)
 
 Run `python run.py --resume JOB_ID --until render` to generate landscape and portrait
