@@ -69,10 +69,16 @@ class ProviderTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             opts={"output_dir":str(Path(td)/"out"),"database":str(Path(td)/"db.sqlite")}
             base=Pipeline(opts)
-            self.assertEqual(base.providers["transcribe"].__class__.__name__,"FasterWhisper")
+            self.assertEqual(base.providers["transcribe"].__class__.__name__,"ImprovedFasterWhisper")
             opts["whisper"]={"provider":"improved"}
             better=Pipeline(opts)
             self.assertEqual(better.providers["transcribe"].__class__.__name__,"ImprovedFasterWhisper")
+            opts["whisper"]={"provider":"original"}
+            original=Pipeline(opts)
+            self.assertEqual(original.providers["transcribe"].__class__.__name__,"FasterWhisper")
+            opts["whisper"]={"provider":"invalid"}
+            with self.assertRaisesRegex(ValueError, "Unknown whisper.provider"):
+                Pipeline(opts)
 
 if __name__=="__main__":
     unittest.main()

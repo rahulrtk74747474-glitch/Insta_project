@@ -2,7 +2,7 @@
 
 The original Stage 2 code remains available in `hindi_pipeline/transcribe.py` and branch `feature/stage2-english-transcription`.
 
-The optional implementation is `hindi_pipeline/transcribe_improved.py` plus `hindi_pipeline/caption_optimizer.py`; set `whisper.provider: improved` in the config to activate it. It does not modify source speech, has no voice translation, and **does not publish anywhere**.
+The **selected/default Option B** implementation is `hindi_pipeline/transcribe_improved.py` plus `hindi_pipeline/caption_optimizer.py`; the main `config.yaml` selects it by default. To revert to the original provider, set `whisper.provider: original` (e.g. `config.stage2_cpu.yaml`). It does not modify source speech, has no voice translation, and **does not publish anywhere**.
 
 ## How to run improved Stage 2
 
@@ -35,3 +35,9 @@ Word error rate is **not measured**: 747 words vs 741 does not imply higher accu
 - Choose mixed: enable the improved provider but set `model: tiny.en` if you prefer lower CPU and model size. Improved captions can work with any supported faster-whisper model.
 
 Important: The earlier Demucs step could not fetch model weights. We intentionally used mixed audio in **both** actual-video comparisons and labelled the condition. This stage is English transcription only; do not confuse it with voice cloning, Hindi generation, or final video assembly.
+
+## Option B selection (approved by user)
+
+Option B is the project default: `whisper.provider: improved`, `model: base.en`, CPU/int8 for portability. The original `FasterWhisper` and `tiny.en` config remain for rollback; neither source nor historical test files were deleted. New or rerun jobs use Option B. **For a job with a completed Stage 2 under the old model, explicitly use `--force-stage transcribe --until transcribe` to replace its saved transcript** (or use a separate output/database to compare without overwriting).
+
+Stage 1's `demucs.enabled: true` remains the default: its checkpoint download was previously blocked. Use `config.stage2_improved.yaml` for a CPU test on original mixed audio while separation remains unresolved. Results are local only; no public uploads.

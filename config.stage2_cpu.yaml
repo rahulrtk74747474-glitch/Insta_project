@@ -5,6 +5,7 @@ demucs:
   enabled: false
   model: htdemucs
 whisper:
+  provider: original
   model: tiny.en
   device: cpu
   compute_type: int8

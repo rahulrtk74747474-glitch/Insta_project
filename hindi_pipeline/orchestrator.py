@@ -9,7 +9,7 @@ from .transcribe import FasterWhisper
 from .transcribe_improved import ImprovedFasterWhisper
 from .translate import OpenAIHindiTranslator
 
-PROVIDERS={"ingest":YtDlpOrFile,"transcribe":FasterWhisper,"translate":OpenAIHindiTranslator}
+PROVIDERS={"ingest":YtDlpOrFile,"transcribe":ImprovedFasterWhisper,"translate":OpenAIHindiTranslator}
 
 class Pipeline:
     def __init__(self,config,providers=None):
@@ -17,8 +17,14 @@ class Pipeline:
         self.root=Path(config.get("output_dir","output")).resolve();self.root.mkdir(parents=True,exist_ok=True)
         self.db=JobDB(Path(config.get("database","state/jobs.sqlite3")))
         self.providers=providers if providers is not None else {s:provider() for s,provider in PROVIDERS.items()}
-        if providers is None and config.get('whisper',{}).get('provider') == 'improved':
-            self.providers['transcribe'] = ImprovedFasterWhisper()
+        if providers is None:
+            selected = config.get("whisper", {}).get("provider", "improved")
+            if selected == "original":
+                self.providers["transcribe"] = FasterWhisper()
+            elif selected == "improved":
+                self.providers["transcribe"] = ImprovedFasterWhisper()
+            else:
+                raise ValueError(f"Unknown whisper.provider: {selected!r}; choose improved or original")
         self.log=logging.getLogger("hindi_pipeline")
     @staticmethod
     def identifier(source,mode):
