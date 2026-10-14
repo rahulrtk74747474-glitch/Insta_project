@@ -102,6 +102,7 @@ These facts were checked against upstream READMEs and GitHub repository metadata
 | [VoiceStudio](https://github.com/debpalash/VoiceStudio) | Desktop install, not an assumed Python API | AGPL-3.0 | Claims 646-language dubbing; engine must be tested for Hindi. |
 | [stickman-video-director](https://github.com/kaomei/stickman-video-director) | Coding-agent skill install | MIT | Storyboard and prompt generator only, not a video-rendering API. |
 | [OpenMontage](https://github.com/dydact/openmontage) | Python dependencies plus Remotion/npm | AGPL-3.0 | Agentic production framework; no verified Hindi guarantees. AGPL requirements matter. |
+| [HeyGem](https://github.com/myxemhoho/HeyGem) | Docker-based Windows/Ubuntu deployment described in README | README advertises MIT code; model community licence must be checked separately | Lists 8 languages excluding Hindi; not integrated. |
 | [Duix-Avatar](https://github.com/duixcom/Duix-Avatar) | Windows-focused setup | Custom DUIX.COM Community License; not a standard OSI license | README lists 8 languages **not including Hindi**. Not selected. |
 | [ComfyUI](https://github.com/Comfy-Org/ComfyUI) + [Ref2VA-VSA](https://github.com/Kablex/ComfyUI-Ref2VA-VSA) | GPU custom-node stack, later milestone | Must verify component weights and licenses | ComfyUI uses GPL-3.0; Ref2VA-VSA code includes Apache-2.0 LICENSE. Model weights may carry separate terms. 24 GB RTX 4090 is a reference benchmark, not a universal minimum. |
 
