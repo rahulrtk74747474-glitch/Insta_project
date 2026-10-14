@@ -27,6 +27,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: stage6-natural-hindi-narration
-          path: dist/natural_hindi_voice.mp3
+          path: |
+            dist/natural_hindi_voice.mp3
+            dist/natural_hindi_voice.srt
+            dist/natural_hindi_voice.json
           retention-days: 14
           if-no-files-found: error
