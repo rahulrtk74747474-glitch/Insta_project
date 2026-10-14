@@ -243,7 +243,7 @@ def render(storyboard, output, voice=None):
                 f.write(f"file '{frame_paths[-1].as_posix()}'\n")
             clip=work/f"{scene.get('id', f'S{i+1:02d}')}.mp4"
             run("ffmpeg","-y","-loglevel","error","-safe","0","-f","concat","-i",concat,
-                "-vf","fps=15,format=yuv420p","-c:v","libx264","-preset","veryfast",
+                "-vf","fps=30,format=yuv420p","-c:v","libx264","-preset","veryfast",
                 "-crf","23","-an",clip)
             clips.append(clip)
         merge=work/"clips.txt"
