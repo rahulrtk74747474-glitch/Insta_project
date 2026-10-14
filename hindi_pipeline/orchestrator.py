@@ -40,7 +40,7 @@ class Pipeline:
     @staticmethod
     def valid(result):
         if not result:return False
-        paths=("video","audio","vocals","no_vocals","english_srt","english_json","asr_report","hindi_srt","hindi_json")
+        paths=("video","audio","vocals","no_vocals","english_srt","english_json","asr_report","hindi_srt","hindi_json","translation_report")
         return all(not isinstance(v,str) or k not in paths or Path(v).is_file() for k,v in result.items())
     def process(self,id,until="translate",force_stage=None):
         if until not in STAGES:raise ValueError("Unsupported stage")
@@ -50,7 +50,19 @@ class Pipeline:
         for stage in STAGES[:STAGES.index(until)+1]:
             if stage==force_stage:forced=True
             state=self.db.stage(id,stage)
-            if not forced and state["status"]=="completed" and self.valid(state["result"]):
+            is_current = True
+            # Do not incorrectly reuse previously translated files if English text,
+            # target model, glossary, or timing settings have changed.
+            if stage == "translate" and not forced and state["status"] == "completed":
+                provider = self.providers[stage]
+                if hasattr(provider, "fingerprint"):
+                    expected = provider.fingerprint({
+                        "job_id": id, "folder": str(out), "source": job["source"],
+                        "source_type": job["source_type"], "config": self.config,
+                        "previous": previous,
+                    })
+                    is_current = bool(state["result"] and state["result"].get("fingerprint") == expected)
+            if not forced and is_current and state["status"]=="completed" and self.valid(state["result"]):
                 previous[stage]=state["result"]
                 self.log.info("stage.skipped",extra={"job_id":id,"stage":stage})
                 continue

@@ -14,7 +14,9 @@ whisper:
 translation:
   provider: openai
   model: gpt-4o-mini
-  batch_size: 10
+  batch_size: 8
+  max_quality_attempts: 3
+  speed_tolerance: 1.15
   glossary:
     active recall: एक्टिव रिकॉल
     spaced repetition: स्पेस्ड रिपिटिशन

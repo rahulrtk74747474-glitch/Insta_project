@@ -8,3 +8,6 @@ state/
 *.wav
 *.log
 .DS_Store
+
+# Stage 3 local checkpoint/cache files; never commit transcripts
+*.tmp

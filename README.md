@@ -7,6 +7,10 @@
 
 The default English ASR provider is now `ImprovedFasterWhisper`. See [Stage 2 comparison and configuration](docs/stages/02_improved_comparison.md). Set `whisper.provider: original` to use legacy caption formatting.
 
+## Stage 3 — Hindi translation (in development, review branch)
+
+English Stage 2 (Option B `base.en`) and Stage 1 are preserved. Stage 3 produces only `hindi.srt`, `hindi.json`, and `translation_report.json`, with a resumable per-batch cache. No video is rendered or uploaded; real API integration requires a key in `.env`. See [Stage 3 instructions](docs/stages/03_translate.md).
+
 ## What works (once CI passes)
 
 The renderer converts a Hindi storyboard to an original 9:16 (720×1280, 30fps) colored doodle video, with a Hindi temporary narration and editable scene durations. You can provide your own WAV/MP3 narration using `--voice`. Visual asset overrides (`image` on a scene, relative to its storyboard file) let us replace placeholder doodles with professionally generated original drawings. The seven-scene study example is in `data/storyboards/time_loop.json`.
