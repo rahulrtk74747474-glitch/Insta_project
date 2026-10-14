@@ -23,7 +23,7 @@ def goertzel(samples,rate,frequency):
     for v in samples:
         new=v+coeff*prev-prevprev
         prevprev,prev=prev,new
-    return max(0,prevprev*prevprev+prev*prev-coeff*prev*prev)
+    return max(0,prevprev*prevprev+prev*prev-coeff*prev*prevprev)
 
 
 class RenderTests(unittest.TestCase):
