@@ -50,7 +50,7 @@ class Pipeline:
     @staticmethod
     def valid(result):
         if not result:return False
-        paths=("video","audio","vocals","no_vocals","english_srt","english_json","asr_report","hindi_srt","hindi_json","translation_report","hindi_voice_script_json","hindi_voice_script_txt","hindi_voice_wav","voice_report","hindi_tts_estimated_srt","hindi_tts_estimated_json")
+        paths=("video","audio","vocals","no_vocals","english_srt","english_json","asr_report","hindi_srt","hindi_json","translation_report","hindi_voice_script_json","hindi_voice_script_txt","hindi_voice_wav","voice_report","hindi_tts_estimated_srt","hindi_tts_estimated_json","hindi_voice_script_final_json","hindi_voice_script_final_txt")
         return all(not isinstance(v,str) or k not in paths or Path(v).is_file() for k,v in result.items())
     def process(self,id,until="translate",force_stage=None):
         if until not in STAGES:raise ValueError("Unsupported stage")

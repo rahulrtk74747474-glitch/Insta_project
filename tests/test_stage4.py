@@ -108,13 +108,44 @@ class TestStage4(unittest.TestCase):
         self.assertEqual(result["api_requests"],0)
 
     def test_long_speech_fails_without_clipping(self):
+        # Strict fallback: auto-revision can be explicitly disabled.
+        self.ctx["config"]["voice"]["auto_shorten"]=False
         voice=FakeHindiVoice([4])
-        with self.assertRaisesRegex(ValueError,"rewrite this idea more concisely"):
+        with self.assertRaisesRegex(ValueError,"Automated shortening was unavailable"):
             voice.run(self.ctx)
         self.assertEqual(voice.synth_calls,1)
         self.assertFalse((self.root/"voice"/"hindi_voice.wav").exists())
-        with self.assertRaisesRegex(ValueError,"rewrite this idea more concisely"):
+        with self.assertRaisesRegex(ValueError,"Automated shortening was unavailable"):
             FakeHindiVoice([]).run(self.ctx) # cached excessively long raw WAV
+
+    def test_overlong_narration_auto_rewrites_without_chatgpt_conversation(self):
+        class Adaptive(FakeHindiVoice):
+            def __init__(self,durations):
+                super().__init__(durations)
+                self.rewrites=0
+            def _revise(self,block,slot,measured,model):
+                self.rewrites+=1
+                self.assert_condition = (slot>0 and measured>slot and model=="gpt-4o-mini")
+                return "बस दिमाग में क्लियर है।"
+        voice=Adaptive([4.0,1.35,2.4])
+        result=voice.run(self.ctx)
+        self.assertEqual(voice.rewrites,1)
+        self.assertTrue(voice.assert_condition)
+        self.assertEqual(voice.synth_calls,3)
+        self.assertTrue(Path(result["hindi_voice_wav"]).exists())
+        final=Path(result["hindi_voice_script_final_txt"]).read_text(encoding="utf-8")
+        self.assertIn("बस दिमाग",final)
+        self.assertNotIn("सोचो, एग्जाम",final)
+        subs=Path(result["hindi_tts_estimated_srt"]).read_text(encoding="utf-8")
+        self.assertIn("बस दिमाग",subs)
+        metrics=json.loads(Path(result["voice_report"]).read_text(encoding="utf-8"))
+        self.assertEqual(metrics["automatically_revised_ideas"],1)
+        self.assertEqual(metrics["revision_attempts"],1)
+        # Completed second run: regenerate nothing and don't rewrite again.
+        again=Adaptive([])
+        recovered=again.run(self.ctx)
+        self.assertEqual(again.rewrites,0)
+        self.assertEqual(recovered["cached_blocks"],3)
 
     def test_auto_tempo_within_safe_cap(self):
         voice=FakeHindiVoice([2.65,2.6])  # first slot is only 2.5s

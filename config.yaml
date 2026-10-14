@@ -32,3 +32,6 @@ voice:
   voice: marin
   max_tempo: 1.18
   audio_sample_rate: 24000
+  auto_shorten: true
+  max_rewrites: 2
+  rewrite_model: gpt-4o-mini
