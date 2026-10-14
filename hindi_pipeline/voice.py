@@ -159,6 +159,12 @@ class OpenAIHindiVoice(StageProvider):
         return _signature(doc,context["config"].get("voice",{}),duration)
 
     def _synthesize(self,text,output,model,voice,instructions):
+        if self.client is None:
+            from openai import OpenAI
+            key=os.environ.get("OPENAI_API_KEY")
+            if not key:
+                raise RuntimeError("OPENAI_API_KEY missing; set it in local .env")
+            self.client=OpenAI(api_key=key,timeout=120.0,max_retries=2)
         # This is the documented official OpenAI SDK streaming TTS call.
         with self.client.audio.speech.with_streaming_response.create(
             model=model,voice=voice,input=text,instructions=instructions,
@@ -208,12 +214,6 @@ class OpenAIHindiVoice(StageProvider):
             raw=cache/f"{block['id']:04d}_tts_raw.wav"
             fitted=cache/f"{block['id']:04d}_fitted.wav"
             if not raw.is_file() or raw.stat().st_size<44:
-                if self.client is None:
-                    from openai import OpenAI
-                    key=os.environ.get("OPENAI_API_KEY")
-                    if not key:
-                        raise RuntimeError("OPENAI_API_KEY missing; set it in local .env")
-                    self.client=OpenAI(api_key=key,timeout=120.0,max_retries=2)
                 tmp=raw.with_suffix(".part.wav")
                 try:
                     self._synthesize(block["narration"],tmp,model,voice,instructions)
