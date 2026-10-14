@@ -1,0 +1,40 @@
+name: Stage 4 - Hindi Voice and Timefit Tests
+on:
+  push:
+    branches: ['feature/stage4-hindi-voice-timing']
+    paths:
+      - 'hindi_pipeline/**'
+      - 'tests/test_stage4.py'
+      - 'docs/stages/04_voice.md'
+      - '.github/workflows/stage4.yml'
+  pull_request:
+    paths:
+      - 'hindi_pipeline/**'
+      - 'tests/test_stage4.py'
+      - '.github/workflows/stage4.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  stage4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install and verify FFmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          ffmpeg -version
+          ffprobe -version
+      - name: Test stages 1–4 without API credentials
+        run: |
+          python -m unittest discover -s tests -p 'test_pipeline.py' -v
+          python -m unittest discover -s tests -p 'test_stage2.py' -v
+          python -m unittest discover -s tests -p 'test_stage2_improved.py' -v
+          python -m unittest discover -s tests -p 'test_stage3.py' -v
+          python -m unittest discover -s tests -p 'test_spoken_adapter.py' -v
+          python -m unittest discover -s tests -p 'test_stage4.py' -v

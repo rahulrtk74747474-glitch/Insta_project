@@ -1,0 +1,45 @@
+{
+  "stage": "4 — Hindi voice and measured timefit",
+  "branch": "feature/stage4-hindi-voice-timing",
+  "pull_request": "https://github.com/rahulrtk74747474-glitch/Insta_project/pull/7",
+  "previous_stages_preserved": true,
+  "stage3_spoken_style_lint_added": true,
+  "stage4_implementation": {
+    "tts_model": "gpt-4o-mini-tts",
+    "voice": "marin",
+    "language": "Hindi supported in official docs, English-optimized voices",
+    "sample_rate_hz": 24000,
+    "output_format": "16-bit mono PCM WAV",
+    "default_max_tempo": 1.18,
+    "resumable_audio_per_idea": true,
+    "sqlite_migration_for_existing_jobs": true,
+    "original_video_timeline_silence": true,
+    "word_alignment_claim": false,
+    "subtitles_aligned": "estimated within measured speech block",
+    "manual_publishing_only": true,
+    "auto_shorten_long_ideas": true,
+    "max_rewrites": 2,
+    "rewrite_model": "gpt-4o-mini",
+    "final_voice_script_audit": true,
+    "final_narration_files": [
+      "hindi_voice_script_final.txt",
+      "hindi_voice_script_final.json"
+    ]
+  },
+  "test_evidence": {
+    "type": "Synthetic WAV + mocked TTS; real local FFmpeg",
+    "run": "https://github.com/rahulrtk74747474-glitch/Insta_project/actions/runs/38511788795",
+    "previous_stage_tests_passed": 44,
+    "new_stage4_tests_passed": 10,
+    "total_automated_tests_passed": 54
+  },
+  "not_tested": [
+    "Paid live OpenAI Hindi TTS on actual video",
+    "Human pronunciation quality and Indian accent",
+    "Full end-to-end video output",
+    "Word-for-word Hindi forced alignment",
+    "Human evaluation of meaning preservation after automated shortening"
+  ],
+  "no_keys_committed": true,
+  "no_original_media_committed": true
+}
