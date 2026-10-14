@@ -9,8 +9,9 @@ from .transcribe import FasterWhisper
 from .transcribe_improved import ImprovedFasterWhisper
 from .translate import OpenAIHindiTranslator
 from .translate_spoken import NaturalHindiScriptAdapter
+from .voice import OpenAIHindiVoice
 
-PROVIDERS={"ingest":YtDlpOrFile,"transcribe":ImprovedFasterWhisper,"translate":OpenAIHindiTranslator}
+PROVIDERS={"ingest":YtDlpOrFile,"transcribe":ImprovedFasterWhisper,"translate":OpenAIHindiTranslator,"voice":OpenAIHindiVoice}
 
 class Pipeline:
     def __init__(self,config,providers=None):
@@ -49,7 +50,7 @@ class Pipeline:
     @staticmethod
     def valid(result):
         if not result:return False
-        paths=("video","audio","vocals","no_vocals","english_srt","english_json","asr_report","hindi_srt","hindi_json","translation_report","hindi_voice_script_json","hindi_voice_script_txt")
+        paths=("video","audio","vocals","no_vocals","english_srt","english_json","asr_report","hindi_srt","hindi_json","translation_report","hindi_voice_script_json","hindi_voice_script_txt","hindi_voice_wav","voice_report","hindi_tts_estimated_srt","hindi_tts_estimated_json")
         return all(not isinstance(v,str) or k not in paths or Path(v).is_file() for k,v in result.items())
     def process(self,id,until="translate",force_stage=None):
         if until not in STAGES:raise ValueError("Unsupported stage")
@@ -62,7 +63,7 @@ class Pipeline:
             is_current = True
             # Do not incorrectly reuse previously translated files if English text,
             # target model, glossary, or timing settings have changed.
-            if stage == "translate" and not forced and state["status"] == "completed":
+            if stage in ("translate","voice") and not forced and state["status"] == "completed":
                 provider = self.providers[stage]
                 if hasattr(provider, "fingerprint"):
                     expected = provider.fingerprint({

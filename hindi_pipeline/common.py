@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-STAGES=("ingest","transcribe","translate")
+STAGES=("ingest","transcribe","translate","voice")
 
 class StageProvider(ABC):
     @abstractmethod

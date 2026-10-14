@@ -26,6 +26,13 @@ class JobDB:
             PRIMARY KEY(job_id,stage)
         );
         """)
+        # Schema migration: users who finished Stages 1-3 already have jobs in SQLite.
+        # Add the new stage row without deleting/reprocessing previous stage outputs.
+        for name in STAGES:
+            self.conn.execute(
+                "INSERT OR IGNORE INTO stage_runs(job_id,stage) "
+                "SELECT id, ? FROM jobs", (name,)
+            )
         self.conn.commit()
     def add(self,id,source,mode):
         with self.conn:

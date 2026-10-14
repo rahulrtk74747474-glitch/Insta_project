@@ -7,6 +7,16 @@
 
 The default English ASR provider is now `ImprovedFasterWhisper`. See [Stage 2 comparison and configuration](docs/stages/02_improved_comparison.md). Set `whisper.provider: original` to use legacy caption formatting.
 
+## Stage 4 — Hindi voice audio and timeline fitting (review branch)
+
+The new `voice` stage reads Stage 3's **conversational Hindi narration script**.
+It generates per-idea speech via the official OpenAI TTS API, caches each block,
+checks actual WAV duration, and produces a 24 kHz mono WAV on the source-video
+timeline. It will **stop and report the offending block** if natural audio will not fit
+within the limited tempo adjustment. Subtitles are estimated within measured
+audio blocks; they are not word-aligned. No video export or publication.
+See [Stage 4 guide](docs/stages/04_voice.md).
+
 ## Stage 3 — Everyday spoken Hindi script (in development, review branch)
 
 The new default is `translation.mode: spoken_adaptation`. Instead of reading a
