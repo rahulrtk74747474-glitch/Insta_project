@@ -98,11 +98,11 @@ These facts were checked against upstream READMEs and GitHub repository metadata
 | [Demucs](https://github.com/facebookresearch/demucs) | `pip install demucs`; `python -m demucs --two-stems=vocals` | MIT | Separates sound without language awareness; upstream repo archived. |
 | [faster-whisper](https://github.com/SYSTRAN/faster-whisper) | `pip install faster-whisper`; word_timestamps=True | MIT | Multilingual Whisper ASR, explicitly transcribing English in this milestone. |
 | [OpenAI Python SDK](https://github.com/openai/openai-python) | `pip install openai`, Chat Completions JSON-schema response | Apache-2.0 SDK; hosted model proprietary | Hindi output depends on selected model, quotas and account billing. |
-| [OmniVoice](https://github.com/k2-fsa/OmniVoice) | `pip install omnivoice` in README | Apache-2.0 code | 600+ languages claimed; check Hindi entry and chosen model terms before Stage 4. |
+| [OmniVoice](https://github.com/k2-fsa/OmniVoice) | `pip install omnivoice` in README | Apache-2.0 code | Hindi is explicitly listed as code `hi` in `docs/languages.md`; model license and cloned-voice consent still need review before Stage 4. |
 | [VoiceStudio](https://github.com/debpalash/VoiceStudio) | Desktop install, not an assumed Python API | AGPL-3.0 | Claims 646-language dubbing; engine must be tested for Hindi. |
 | [stickman-video-director](https://github.com/kaomei/stickman-video-director) | Coding-agent skill install | MIT | Storyboard and prompt generator only, not a video-rendering API. |
 | [OpenMontage](https://github.com/dydact/openmontage) | Python dependencies plus Remotion/npm | AGPL-3.0 | Agentic production framework; no verified Hindi guarantees. AGPL requirements matter. |
-| [Duix-Avatar](https://github.com/duixcom/Duix-Avatar) | Windows-focused setup | Repository reports nonstandard license metadata | README lists 8 languages **not including Hindi**. Not selected. |
-| [ComfyUI](https://github.com/comfyanonymous/ComfyUI) + [Ref2VA-VSA](https://github.com/Kablex/ComfyUI-Ref2VA-VSA) | GPU custom-node stack, later milestone | Must verify component weights and licenses | 24 GB RTX 4090 is an example; not a universal minimum. |
+| [Duix-Avatar](https://github.com/duixcom/Duix-Avatar) | Windows-focused setup | Custom DUIX.COM Community License; not a standard OSI license | README lists 8 languages **not including Hindi**. Not selected. |
+| [ComfyUI](https://github.com/Comfy-Org/ComfyUI) + [Ref2VA-VSA](https://github.com/Kablex/ComfyUI-Ref2VA-VSA) | GPU custom-node stack, later milestone | Must verify component weights and licenses | ComfyUI uses GPL-3.0; Ref2VA-VSA code includes Apache-2.0 LICENSE. Model weights may carry separate terms. 24 GB RTX 4090 is a reference benchmark, not a universal minimum. |
 
 No speculative plugin/API for the later video stages is included in the runnable code. Stages 4–10 will be proposed only after your approval of this milestone.
