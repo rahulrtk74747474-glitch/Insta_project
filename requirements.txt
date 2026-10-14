@@ -12,3 +12,6 @@ openai>=1.55,<3
 PyYAML>=6,<7
 python-dotenv>=1,<2
 # Install Demucs separately: pip install -r requirements-demucs.txt
+
+# Independent Hindi neural TTS (no OmniVoice/eSpeak)
+edge-tts>=7,<9
