@@ -83,7 +83,7 @@ The job saves successful platform upload IDs in queue state and makes a GitHub c
 npx skills add ./.agents/skills/hindi-reel-production -a codex -y
 ```
 
-We checked the GitHub project and its documentation. The CLI has **not** been installed or executed within this environment due to lack of npm network access.
+Verified in GitHub Actions: `npx skills --help` ran successfully and `npx skills add ./.agents/skills/hindi-reel-production --list` found the `hindi-reel-production` skill. This confirms **skill discovery**, not automatic video generation.
 
 ## Next development stages
 
