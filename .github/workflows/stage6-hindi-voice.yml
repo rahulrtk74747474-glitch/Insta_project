@@ -1,0 +1,35 @@
+name: Stage 6 - Natural Hindi Neural Voice Preview
+on:
+  push:
+    branches: [feature/stage6-final-hindi-film]
+    paths: ['scripts/edge_hindi_tts.py','examples/original_time_loop_hindi_narration.txt','.github/workflows/stage6-hindi-voice.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  voice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Hindi voice runtime
+        run: |
+          python -m pip install edge-tts
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+      - name: Generate conversational Hindi narration
+        run: |
+          python scripts/edge_hindi_tts.py --output dist/natural_hindi_voice.mp3
+          ffprobe -v error -show_entries format=duration,size -of default=noprint_wrappers=1 dist/natural_hindi_voice.mp3
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stage6-natural-hindi-narration
+          path: |
+            dist/natural_hindi_voice.mp3
+            dist/natural_hindi_voice.srt
+            dist/natural_hindi_voice.json
+          retention-days: 14
+          if-no-files-found: error
