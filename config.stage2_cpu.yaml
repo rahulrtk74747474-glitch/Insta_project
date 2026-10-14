@@ -1,0 +1,19 @@
+# Quick Stage 2 CPU test; uses original mixed audio instead of Demucs-separated vocals.
+output_dir: output
+database: state/jobs.sqlite3
+demucs:
+  enabled: false
+  model: htdemucs
+whisper:
+  model: tiny.en
+  device: cpu
+  compute_type: int8
+  beam_size: 2
+  vad_filter: true
+  max_caption_seconds: 6.0
+  max_caption_chars: 84
+translation:
+  provider: openai
+  model: gpt-4o-mini
+  batch_size: 10
+  glossary: {}

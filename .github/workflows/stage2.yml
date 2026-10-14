@@ -1,0 +1,86 @@
+name: Stage 2 - English Word-Timestamp Transcription
+on:
+  push:
+    branches: ['feature/stage2-english-transcription']
+    paths:
+      - 'hindi_pipeline/**'
+      - 'tests/test_stage2.py'
+      - 'scripts/stage2_live_smoke.py'
+      - '.github/workflows/stage2.yml'
+  pull_request:
+    paths:
+      - 'hindi_pipeline/**'
+      - 'tests/test_stage2.py'
+      - 'scripts/stage2_live_smoke.py'
+      - '.github/workflows/stage2.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Stage 2 and previous Stage 1 unit tests
+        run: |
+          python -m unittest discover -s tests -p test_stage2.py -v
+          python -m unittest discover -s tests -p test_pipeline.py -v
+  actual-whisper-smoke:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install English TTS and actual ASR runtime
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq espeak ffmpeg
+          pip install 'faster-whisper>=1.1,<2'
+      - name: Transcribe synthesized English narration (tiny.en)
+        run: python -m scripts.stage2_live_smoke
+      - name: Upload proof-of-transcription files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage2-synthetic-asr-results
+          path: dist/stage2_synthetic_smoke/
+          if-no-files-found: warn
+          retention-days: 14
+
+  offline-model-bundle:
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, '[offline-asr]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Download CPU ASR wheels for an offline Python 3.13 test
+        run: |
+          mkdir -p dist/offline-asr/wheels dist/offline-asr/model
+          python -m pip download --only-binary=:all: --dest dist/offline-asr/wheels 'faster-whisper>=1.1,<2' 'av>=11,<19'
+      - name: Download tiny.en inference checkpoint (no user video)
+        run: |
+          python -m pip install 'huggingface-hub>=0.30'
+          python - <<'PY'
+          from huggingface_hub import snapshot_download
+          path=snapshot_download("Systran/faster-whisper-tiny.en",local_dir="dist/offline-asr/model",
+                                 allow_patterns=["config.json","model.bin","tokenizer.json","vocabulary.*"])
+          print("Model downloaded to:",path)
+          PY
+          ls -lh dist/offline-asr/model/model.bin
+      - name: Transfer offline ASR runtime (ephemeral artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage2-offline-python313-model
+          path: dist/offline-asr
+          retention-days: 1
