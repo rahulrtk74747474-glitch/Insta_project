@@ -1,5 +1,8 @@
 # Insta Project — Hindi Doodle Reel Automation
 
+> **Current project policy (Milestone 1): manual publication only.** Scheduled Instagram/YouTube publishing has been disabled in `.github/workflows/reel.yml`. The new `run.py` pipeline only creates local artifacts. See [README_MILESTONE1.md](README_MILESTONE1.md) for setup and tests.
+
+
 **MVP stage: code and workflow are under review. Nothing is auto-posting yet.**
 
 ## What works (once CI passes)

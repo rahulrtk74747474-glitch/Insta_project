@@ -2,8 +2,8 @@ __pycache__/
 .pytest_cache/
 .env
 .venv/
-dist/
-work/
+output/
+state/
 *.mp4
 *.wav
 *.log

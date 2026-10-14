@@ -1,4 +1,12 @@
+# Existing reel prototype dependencies
 Pillow>=10.1,<13
 requests>=2.31,<3
 google-api-python-client>=2.140,<3
 google-auth>=2.32,<3
+# Milestone 1
+yt-dlp>=2025.1
+faster-whisper>=1.1,<2
+openai>=1.55,<3
+PyYAML>=6,<7
+python-dotenv>=1,<2
+# Install Demucs separately: pip install -r requirements-demucs.txt
