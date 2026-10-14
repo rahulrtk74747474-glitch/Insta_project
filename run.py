@@ -1,4 +1,4 @@
-"""Resumable rights-checked pipeline CLI: English ingest through Hindi TTS; manual publishing."""
+"""Resumable rights-checked pipeline CLI: English ingest through Hindi MP4 preview; manual publishing."""
 from __future__ import annotations
 import argparse,json,sys
 from pathlib import Path
@@ -8,7 +8,7 @@ from hindi_pipeline.common import STAGES,setup_logging
 from hindi_pipeline.orchestrator import Pipeline
 
 def main(argv=None):
-    p=argparse.ArgumentParser(description="Authorized English video to Hindi voice; stages 1-4, NO uploads")
+    p=argparse.ArgumentParser(description="Authorized English video to reviewable Hindi MP4; stages 1-5, NO uploads")
     group=p.add_mutually_exclusive_group(required=True)
     group.add_argument("--url")
     group.add_argument("--file",type=Path)
