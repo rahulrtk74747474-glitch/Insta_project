@@ -35,3 +35,15 @@ voice:
   auto_shorten: true
   max_rewrites: 2
   rewrite_model: gpt-4o-mini
+render:
+  landscape: [1280, 720]
+  portrait: [720, 1280]
+  portrait_mode: fit
+  fps: 30
+  preset: veryfast
+  crf: 23
+  burn_subtitles: true
+  subtitle_font: Noto Sans Devanagari
+  subtitle_font_size: 24
+  mix_separated_background: false
+  background_volume: 0.12

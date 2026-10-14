@@ -1,0 +1,50 @@
+name: Stage 5 - Hindi MP4 Rendering Validation
+on:
+  push:
+    branches: ['feature/stage5-video-composition']
+    paths:
+      - 'hindi_pipeline/**'
+      - 'tests/test_stage5.py'
+      - '.github/workflows/stage5.yml'
+  pull_request:
+    paths:
+      - 'hindi_pipeline/**'
+      - 'tests/test_stage5.py'
+      - '.github/workflows/stage5.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install FFmpeg, libass and Hindi font
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-noto-core
+          ffmpeg -filters | grep subtitles
+      - name: Regression tests for preserved stages
+        run: |
+          python -m unittest discover -s tests -p 'test_pipeline.py' -v
+          python -m unittest discover -s tests -p 'test_stage2.py' -v
+          python -m unittest discover -s tests -p 'test_stage2_improved.py' -v
+          python -m unittest discover -s tests -p 'test_stage3.py' -v
+          python -m unittest discover -s tests -p 'test_spoken_adapter.py' -v
+          python -m unittest discover -s tests -p 'test_stage4.py' -v
+      - name: Actual synthetic MP4 render tests (16:9 and 9:16)
+        env:
+          STAGE5_SAVE_SAMPLE: "1"
+        run: python -m unittest discover -s tests -p 'test_stage5.py' -v
+      - name: Upload synthetic video previews for review (never user's video)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage5-synthetic-landscape-portrait-previews
+          path: dist/stage5_synthetic_preview/
+          if-no-files-found: warn
+          retention-days: 14

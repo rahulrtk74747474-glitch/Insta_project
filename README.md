@@ -7,6 +7,16 @@
 
 The default English ASR provider is now `ImprovedFasterWhisper`. See [Stage 2 comparison and configuration](docs/stages/02_improved_comparison.md). Set `whisper.provider: original` to use legacy caption formatting.
 
+## Stage 5 — Hindi video composition (review branch)
+
+Run `python run.py --resume JOB_ID --until render` to generate landscape and portrait
+MP4 previews from the original authorized video, Hindi voice track and Stage 4
+estimated Hindi subtitles. This **replaces the original English audio** and never
+uploads a finished video. Portrait defaults to *fit* with black padding to
+preserve the full image; a configurable *fill* mode crops the sides.
+Background audio is off unless a genuine Demucs `no_vocals.wav` stem exists.
+See [Stage 5 render guide](docs/stages/05_render.md).
+
 ## Stage 4 — Hindi voice audio and timeline fitting (review branch)
 
 The new `voice` stage reads Stage 3's **conversational Hindi narration script**.

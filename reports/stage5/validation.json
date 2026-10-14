@@ -1,0 +1,62 @@
+{
+  "milestone": "Stage 5 — Hindi MP4 Composition",
+  "status": "IMPLEMENTED_SYNTHETIC_TESTS_PASSED_REVIEW_REQUIRED",
+  "repository": "rahulrtk74747474-glitch/Insta_project",
+  "main_checkpoint": {
+    "merged_pull_requests": [
+      5,
+      6,
+      7
+    ],
+    "preserved_stages": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "status": "Merged and saved"
+  },
+  "stage5": {
+    "branch": "feature/stage5-video-composition",
+    "review_pr": "https://github.com/rahulrtk74747474-glitch/Insta_project/pull/8",
+    "merged": false,
+    "outputs": [
+      "hindi_landscape.mp4",
+      "hindi_portrait.mp4",
+      "render_report.json"
+    ],
+    "dimensions_default": {
+      "landscape": [
+        1280,
+        720
+      ],
+      "portrait": [
+        720,
+        1280
+      ]
+    },
+    "codec": "H.264 video + AAC audio",
+    "manual_publish_only": true,
+    "english_source_audio_retained": false,
+    "optional_background_requires_demucs_stem": true,
+    "subtitle_times": "estimated within measured TTS blocks, not forced word-level alignment",
+    "portrait_default": "fit without cropping"
+  },
+  "testing": {
+    "workflow": "https://github.com/rahulrtk74747474-glitch/Insta_project/actions/runs/38532680898",
+    "total_passed": 62,
+    "new_stage5_tests_passed": 8,
+    "synthetic_mp4_artifact_name": "stage5-synthetic-landscape-portrait-previews",
+    "artifact_id": 11878138709,
+    "actual_user_video_render_test": false,
+    "test_media": "synthetic video, 220 Hz English stand-in, 440 Hz Hindi stand-in"
+  },
+  "known_gaps": [
+    "Stage 1 Demucs weights not available in earlier environment",
+    "Stage 3 natural Hindi full-video LLM test not run",
+    "Stage 4 live TTS quality and pronunciation not assessed",
+    "Stage 5 original user video not rendered",
+    "Word-level Hindi subtitle alignment not implemented",
+    "Automatic publishing intentionally disabled"
+  ]
+}
