@@ -47,7 +47,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: hindi-reel-preview
-          path: dist/preview.mp4
+          path: |
+            dist/preview.mp4
+            dist/preview_scenes/*.mp4
           retention-days: 7
 
   publish:
@@ -89,3 +91,17 @@ jobs:
             git commit -m "Record reel upload results"
             git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
+
+  skills-cli-check:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Vercel Labs skills CLI and discover our local skill
+        run: |
+          npx --yes skills --help
+          npx --yes skills add ./.agents/skills/hindi-reel-production --list
