@@ -7,6 +7,10 @@
 
 The default English ASR provider is now `ImprovedFasterWhisper`. See [Stage 2 comparison and configuration](docs/stages/02_improved_comparison.md). Set `whisper.provider: original` to use legacy caption formatting.
 
+## Stage 3 — Hindi translation (in development, review branch)
+
+English Stage 2 (Option B `base.en`) and Stage 1 are preserved. Stage 3 produces only `hindi.srt`, `hindi.json`, and `translation_report.json`, with a resumable per-batch cache. No video is rendered or uploaded; real API integration requires a key in `.env`. See [Stage 3 instructions](docs/stages/03_translate.md).
+
 ## What works (once CI passes)
 
 The renderer converts a Hindi storyboard to an original 9:16 (720×1280, 30fps) colored doodle video, with a Hindi temporary narration and editable scene durations. You can provide your own WAV/MP3 narration using `--voice`. Visual asset overrides (`image` on a scene, relative to its storyboard file) let us replace placeholder doodles with professionally generated original drawings. The seven-scene study example is in `data/storyboards/time_loop.json`.
@@ -14,7 +18,7 @@ The renderer converts a Hindi storyboard to an original 9:16 (720×1280, 30fps) 
 The pipeline also includes:
 - GitHub Actions PR/push tests and a downloadable MP4 preview artifact.
 - Permission-checked JSON queue and upload-ID tracking so retries can skip already published platforms.
-- Upload code for the official YouTube Data API and Instagram Reels resumable upload API (live publishing **not tested**).
+- Historical platform upload adapters exist in the older reelbot prototype but are not used by this pipeline; publishing is disabled.
 
 ## Run a no-cost prototype locally
 
@@ -60,25 +64,9 @@ python -m reelbot --queue data/queue.json --output dist/test.mp4
 
 **Current limitation:** Input links are stored, but social-link downloading, speech transcription, automatic translation, script validation, automatic original image generation and automated storyboard creation are NOT integrated yet. Link-only unattended production therefore remains a later phase.
 
-## Daily publishing at 7 PM IST
+## Manual publishing only
 
-`.github/workflows/reel.yml` contains a GitHub Actions schedule for **6:35 PM IST**. If enabled and merged into the default branch, it prepares an approved queued Reel and waits until 7:00 PM IST before making API publication requests. GitHub schedule starts can be delayed, and actual Instagram availability may occur later because video processing is asynchronous. A self-hosted runner offers more predictable scheduling.
-
-Required repository settings under **Settings → Secrets and variables → Actions**:
-
-| Kind | Key | Notes |
-| --- | --- | --- |
-| Variable | `ENABLE_AUTOPUBLISH` | Set `true` only after fully testing and confirming permissions |
-| Variable | `YOUTUBE_PRIVACY` | `private` for testing; `public` only after verified |
-| Secret | `YOUTUBE_CLIENT_ID` | OAuth client |
-| Secret | `YOUTUBE_CLIENT_SECRET` | OAuth secret |
-| Secret | `YOUTUBE_REFRESH_TOKEN` | User-authorized offline refresh token |
-| Secret | `META_IG_USER_ID` | Professional Instagram account ID |
-| Secret | `META_ACCESS_TOKEN` | Access token with publishing privileges |
-
-The scheduled workflow runs only on **main** after a merge, not on a PR branch. Real publishing must remain disabled until both API adapters are tested with your connected accounts. YouTube's own docs disagree on whether unverified projects can publish videos publicly; test your credentials before assuming public visibility. Instagram needs an eligible professional account and permissioned Meta app; no paid hosting is necessary for local resumable uploads.
-
-The job saves successful platform upload IDs in queue state and makes a GitHub commit, even when a second platform upload fails.
+The English-to-Hindi pipeline (`run.py`) **creates files and never uploads video or calls social-media publishing APIs**. The legacy reel-preview project contains old publishing adapters for historical reference, but the GitHub Actions scheduled/publish jobs have been disabled. No publishing credentials are required for Stages 1–3. All video outputs are intended for manual review and manual publication.
 
 ## Vercel Labs skills check
 

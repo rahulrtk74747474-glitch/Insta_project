@@ -1,0 +1,56 @@
+{
+  "milestone": "Stage 3 - Hindi translation",
+  "state": "implemented_and_unit_tested_pending_live_api_validation",
+  "branch": "feature/stage3-hindi-translation",
+  "parent_branch": "main",
+  "preserved_previous_work": {
+    "stage1": "Code and partial-pass ingestion report preserved; Demucs model weights were unavailable",
+    "stage2": "Option B (base.en + improved caption grouping) preserved as the default in config.yaml"
+  },
+  "implementation": {
+    "outputs": [
+      "hindi.srt",
+      "hindi.json",
+      "translation_report.json",
+      "SQLite stage_runs status",
+      "private batch checkpoint files"
+    ],
+    "safety": [
+      "Manual publication only",
+      "No embedded secrets",
+      "Input content treated as untrusted text"
+    ],
+    "quality": [
+      "English cue ID and timing preservation",
+      "Glossary term enforcement",
+      "Spoken-duration approximation and up to 3 retranslation attempts",
+      "Resumable cached translation batches",
+      "Devanagari script requirement",
+      "Two-line readable subtitles"
+    ],
+    "providers": [
+      "OpenAI Chat Completions with json_schema via official SDK"
+    ]
+  },
+  "tests": {
+    "github_actions": "https://github.com/rahulrtk74747474-glitch/Insta_project/actions/runs/38508959917",
+    "stage1_pipeline_units": 8,
+    "stage2_legacy_units": 7,
+    "stage2_improved_units": 6,
+    "stage3_units": 14,
+    "total_passed": 35,
+    "real_api_test": false,
+    "model_access_credentials_provided": false
+  },
+  "sample_preview": {
+    "number_of_cues": 8,
+    "source": "User supplied English video selected Stage 2 Option B",
+    "generated_via": "Editorial reference only (not LLM API runtime)",
+    "stored_in_public_repo": false
+  },
+  "limitations": [
+    "No actual Hindi LLM API call was made because OPENAI_API_KEY was not supplied",
+    "Naturalness, accuracy and actual speech duration cannot be established by mocked unit tests",
+    "Stage 4 Hindi voice, storyboard/visuals, QC, final exports not implemented in this milestone"
+  ]
+}
