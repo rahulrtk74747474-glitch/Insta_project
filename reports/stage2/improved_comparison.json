@@ -1,0 +1,43 @@
+{
+  "source": "User-provided 293.481 second study video; source media not committed to public repository",
+  "stage1_demucs": "Unavailable; mixed original audio used for BOTH comparisons",
+  "baseline": {
+    "model": "tiny.en",
+    "captions": 120,
+    "words_with_timestamps": 741,
+    "shorter_than_0_8s": 11,
+    "over_18_chars_per_second": 68,
+    "overlap_count": 0,
+    "source": "existing stage2 output",
+    "over_22_chars_per_second": 28,
+    "mean_characters_per_second": 18.7,
+    "max_chars_per_line": 80
+  },
+  "improved": {
+    "model": "base.en",
+    "captions": 72,
+    "words_with_timestamps": 747,
+    "zero_duration_words_explicitly_flagged": 3,
+    "shorter_than_0_8s": 0,
+    "over_18_chars_per_second": 13,
+    "over_22_chars_per_second": 0,
+    "overlap_count": 0,
+    "max_chars_per_line": 42,
+    "mean_characters_per_second": 15.97
+  },
+  "note": "Counts and presentation stats are measured. Accuracy/WER relative to the real narration is UNKNOWN without a manually verified reference. Both are ASR-generated automatically. No further pipeline stages were run.",
+  "video_uploaded_to_github": false,
+  "public_transcript_uploaded": false,
+  "third_option_caption_fix_only": {
+    "model": "tiny.en",
+    "captions": 76,
+    "words_with_timestamps": 741,
+    "shorter_than_0_8s": 0,
+    "over_18_chars_per_second": 11,
+    "over_22_chars_per_second": 0,
+    "mean_characters_per_second": 15.66,
+    "max_chars_per_line": 42,
+    "overlap_count": 0
+  },
+  "review_package": "Download from ChatGPT artifact 'Stage2_Original_vs_Improved_Results.zip'; source transcript/video are not stored publicly."
+}

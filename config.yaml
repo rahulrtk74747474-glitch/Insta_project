@@ -5,10 +5,11 @@ demucs:
   enabled: true
   model: htdemucs
 whisper:
-  model: small.en
+  provider: improved
+  model: base.en
   device: cpu
   compute_type: int8
-  beam_size: 5
+  beam_size: 4
   vad_filter: true
 translation:
   provider: openai
