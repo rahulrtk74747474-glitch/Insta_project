@@ -3,8 +3,10 @@
 No ChatGPT call, translation, eSpeak or social-media publishing.
 """
 from __future__ import annotations
-import argparse,json,os
+import argparse,json,os,sys
 from pathlib import Path
+# Running as python scripts/preview_personal_voice.py must still locate the repo package.
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from hindi_pipeline.voice_omnivoice import OmniVoiceHindiVoice,reference_files
 
 EXAMPLE = (
