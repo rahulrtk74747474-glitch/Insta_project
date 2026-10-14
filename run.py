@@ -1,4 +1,4 @@
-"""Milestone 1 CLI: rights-checked ingest, transcription and Hindi subtitles."""
+"""Resumable rights-checked pipeline CLI: English ingest through Hindi TTS; manual publishing."""
 from __future__ import annotations
 import argparse,json,sys
 from pathlib import Path
@@ -8,7 +8,7 @@ from hindi_pipeline.common import STAGES,setup_logging
 from hindi_pipeline.orchestrator import Pipeline
 
 def main(argv=None):
-    p=argparse.ArgumentParser(description="English video to Hindi SRT; stages 1–3, NO uploads")
+    p=argparse.ArgumentParser(description="Authorized English video to Hindi voice; stages 1-4, NO uploads")
     group=p.add_mutually_exclusive_group(required=True)
     group.add_argument("--url")
     group.add_argument("--file",type=Path)
