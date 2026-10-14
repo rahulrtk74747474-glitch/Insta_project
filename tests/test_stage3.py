@@ -7,7 +7,7 @@ import unittest
 from pathlib import Path
 from types import SimpleNamespace
 
-from hindi_pipeline.translate import OpenAIHindiTranslator
+from hindi_pipeline.translate import OpenAIHindiTranslator, _srt_text
 from hindi_pipeline.translation_quality import (
     approximate_speech_seconds, check_english_segments, fingerprint,
     glossary_matches, validate_hindi,
@@ -66,6 +66,14 @@ class TestDeterministicChecks(unittest.TestCase):
         _,result=validate_hindi(src,[{"id":1,"text":"Use active recall"}],{"active recall":"एक्टिव रिकॉल"})
         self.assertIn("Missing Hindi Devanagari text",[x["reason"] for x in result["problems"]])
         self.assertIn("Glossary term missing",[x["reason"] for x in result["problems"]])
+    def test_hindi_subtitles_wrap_two_lines(self):
+        sample = "अपना लक्ष्य याद रखिए और हर दिन थोड़ा पढ़िए ताकि सबकुछ अच्छे से याद रहे।"
+        srt = _srt_text([{"start":0,"end":5,"text":sample}])
+        spoken = srt.splitlines()[2:]
+        self.assertEqual(len(spoken), 2)
+        self.assertEqual(" ".join(spoken).replace("  ", " "), sample)
+        self.assertTrue(all(len(line) <= 42 for line in spoken))
+
     def test_config_changes_fingerprint(self):
         data={"segments":[{"id":1,"start":0,"end":3,"text":"Study"}]}
         self.assertNotEqual(fingerprint(data,"model1",{},8,1.15),
