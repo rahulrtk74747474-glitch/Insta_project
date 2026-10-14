@@ -62,7 +62,7 @@ def _read_source(context):
 def _signature(doc, settings, duration):
     selection = {key: settings.get(key) for key in
         ("provider","model","voice","instructions","max_tempo","audio_sample_rate",
-         "auto_shorten","max_rewrites","rewrite_model")}
+         "auto_shorten","max_rewrites","rewrite_model","rate")}
     return hashlib.sha256(json.dumps({
         "revision":REVISION,"blocks":doc["blocks"],
         "configuration":selection,"total_duration_s":duration,
