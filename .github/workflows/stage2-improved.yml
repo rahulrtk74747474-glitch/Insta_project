@@ -1,0 +1,30 @@
+name: Stage 2 Improved - Comparison Tests
+on:
+  push:
+    branches: ['feature/stage2-improved-transcription']
+    paths:
+      - 'hindi_pipeline/**'
+      - 'tests/test_stage2_improved.py'
+      - '.github/workflows/stage2-improved.yml'
+  pull_request:
+    paths:
+      - 'hindi_pipeline/**'
+      - 'tests/test_stage2_improved.py'
+      - '.github/workflows/stage2-improved.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare-unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Unit tests for both original and improved providers
+        run: |
+          python -m unittest discover -s tests -p 'test_pipeline.py' -v
+          python -m unittest discover -s tests -p 'test_stage2.py' -v
+          python -m unittest discover -s tests -p 'test_stage2_improved.py' -v
