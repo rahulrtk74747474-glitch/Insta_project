@@ -251,6 +251,11 @@ def render(storyboard, output, voice=None):
         run("ffmpeg","-y","-loglevel","error","-safe","0","-f","concat","-i",merge,
             "-i",sound,"-map","0:v:0","-map","1:a:0","-c:v","copy","-c:a","aac",
             "-b:a","128k","-movflags","+faststart","-shortest",output)
+        # Persist individual clips for QA and future higher-quality shot replacement.
+        clip_dir=output.parent/(output.stem+"_scenes")
+        clip_dir.mkdir(parents=True,exist_ok=True)
+        for clip in clips:
+            shutil.copy2(clip,clip_dir/clip.name)
     if not output.is_file() or output.stat().st_size < 1000:
         raise RuntimeError("video was not produced")
     return {"path":str(output),"seconds":duration(output),"scenes":len(scenes)}
